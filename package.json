@@ -1,0 +1,16 @@
+{
+  "name": "piarch-a-verification",
+  "version": "0.1.0",
+  "description": "jwt verification service for piarch-a",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^7.1.9",
+    "nanomsg": "^3.2.3",
+    "redis": "^2.6.3"
+  }
+}
