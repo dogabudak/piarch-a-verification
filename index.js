@@ -17,16 +17,12 @@ rep.bind(config.nanomsg.addr);
 rep.on('data', function (buf) {
     var start = Date.now();
     var req = buf.toString().split(' ');
-    console.log(req + ": buf")
-    console.log(req + ": request")
     if (req.length !== 2) {
         rep.send("false")
         return
     }
     verification(req[0], req[1], redis, function (err, answer) {
         if (err) {
-            console.log(err)
-      console.log("2")
             rep.send("false");
             return
         }
