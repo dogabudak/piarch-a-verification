@@ -5,6 +5,7 @@ module.exports = {
         port:6379,
         db: 3
     },
+    keyLocation : './keys/',
     verification : {
         port: 3004
     },
