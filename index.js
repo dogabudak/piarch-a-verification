@@ -21,7 +21,7 @@ rep.on('data', function (buf) {
         rep.send("false")
         return
     }
-    verification(req[0], req[1], redis, function (err, answer) {
+    verification(req[0], req[1], function (err, answer) {
         if (err) {
             rep.send("false");
             return
