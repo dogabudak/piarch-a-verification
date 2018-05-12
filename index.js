@@ -5,12 +5,9 @@
 var verification = require('./lib/verification-factory'),
     nano = require('nanomsg'),
     config= require('./resources/config'),
-    initredis = require('./lib/redis-factory'),
     rep = nano.socket('rep');
 
 
-var redis_instance = new initredis();
-redis = redis_instance.get_instance();
 
 rep.bind(config.nanomsg.addr);
 
