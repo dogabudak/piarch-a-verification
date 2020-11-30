@@ -11,6 +11,5 @@
   "dependencies": {
     "jsonwebtoken": "^7.1.9",
     "nanomsg": "4.1.0",
-    "redis": "^2.6.3"
   }
 }

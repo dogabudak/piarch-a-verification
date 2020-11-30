@@ -2,8 +2,6 @@
  * Created by doga on 28/12/15.
  */
 var nano = require('nanomsg'),
-    redis = require('redis'),
-    config = require('../resources/config'),
     req = nano.socket('req');
 
 
@@ -12,21 +10,6 @@ req.connect('tcp://127.0.0.1:5608')
 req.on('data', function (buf) {
     console.log(buf.toString());
 });
-
-
-
-var redisCli = redis.createClient(config.redis.port, config.redis.host, {no_ready_check: true});
-
-redisCli.on("error", function (err) {
-
-});
-
-redisCli.select(config.redis.db, function (err, res) {
-    if (err)  {
-    }
-});
-
-
 
 setTimeout(() => {
     req.send('jwt eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkb2dhYnVkYWsiLCJpc3MiOiJwaWFyY2hfYSIsImlhdCI6MTUxMzA5OTg1NywiZXhwIjoxNTEzMTM1ODU3fQ.P1_fal0gacr93JIM9NkPdygy7TDx9BloEPWiI18jTKGFtLHVySbMyWm5Wgw9bWanSI2dtIRZrLybjkrmsKiYL4RtlevFP3VUEYyQRGoKk-EhFluMyD6E-uEfwaU22C0WTAjE2JFeoajQ2jzLOBdefnmTa39FFVfN5gAepjg1fnBZk6fezBJbCj1uJvmweKnpqeKaSEqkjqUF2COgBVtPYi8ZBVv0KqJKEiBdGRMvkI7gjftu99-f5rlTBgTCDZTU01-a0_4eIjEDrUHGmsvPF62EKRXTzYKDEtVysCWtu6irzeQec2aOfYCJUwgkXzAPsGS89nCxEAMaxRzsau-YdA')
