@@ -1,4 +1,3 @@
-
 import * as verification from './lib/verification-factory'
 import * as cors from 'cors'
 import * as express from 'express'
@@ -27,7 +26,6 @@ app.get('/verify/:tokenString', async (req, res) => {
         }
         return res.status(StatusCodes.NOT_FOUND).send(false)
     } catch (e) {
-        console.log(e)
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
             error: getReasonPhrase(StatusCodes.INTERNAL_SERVER_ERROR),
         })
