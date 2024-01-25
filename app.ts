@@ -1,4 +1,4 @@
-import * as verification from './lib/verification-factory'
+import { verification } from './lib/verification-factory'
 import * as cors from 'cors'
 import * as express from 'express'
 

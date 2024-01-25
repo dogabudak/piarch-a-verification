@@ -1,9 +1,7 @@
-/**
- * Created by doga on 03/12/16.
- */
+import * as jwt from 'jsonwebtoken'
+import {keyReader}  from './keyReader'
 
-const jwt = require('jsonwebtoken');
-const keys = require('./keyReader.js')();
+const keys = keyReader();
 
 //TODO async await instead callbacks
 function IsvalidPayload(payload) {
@@ -27,7 +25,7 @@ function IsJsonString(str) {
 }
 
 
-var verification = function (type, token, Callback) {
+export const verification = function (type, token, Callback) {
     if (type.toUpperCase() === "JWT") {
         if (!/^[^.]+\.[^.]+\.[^.]+$/.test(token)) {
             Callback('Token format invalid', JSON.stringify({authenticated: false, token: token}))
@@ -44,7 +42,7 @@ var verification = function (type, token, Callback) {
                 var issuer = JSON.parse(jwt_payload).iss;
                 try {
                     if (!keys[issuer]) {
-                        throw ('issuer:' + issuer, 'not found.');
+                        throw ('issuer:' + issuer + 'not found.');
                     }
                     var pub = keys[issuer];
                 } catch (err) {
@@ -82,4 +80,3 @@ var verification = function (type, token, Callback) {
     }));
 
 };
-module.exports = verification;
