@@ -1,9 +1,8 @@
 import * as jwt from 'jsonwebtoken'
-import {keyReader}  from './keyReader'
+import {keyReader} from './keyReader'
 
 const keys = keyReader();
 
-//TODO async await instead callbacks
 function IsvalidPayload(payload) {
     try {
         JSON.parse(payload);
@@ -24,59 +23,45 @@ function IsJsonString(str) {
     return true;
 }
 
-
-export const verification = function (type, token, Callback) {
+export const verify = async function (type, token) {
     if (type.toUpperCase() === "JWT") {
         if (!/^[^.]+\.[^.]+\.[^.]+$/.test(token)) {
-            Callback('Token format invalid', JSON.stringify({authenticated: false, token: token}))
-            return;
+            return JSON.stringify({authenticated: false, token: token});
         }
-        //TODO try'ın içine alınabilir
-        var jwt_all = token.split(".");
-        var jwt_header = jwt_all[0];
-        var jwt_payload = jwt_all[1];
+        const jwt_all = token.split(".");
+        let jwt_header = jwt_all[0];
+        let jwt_payload = jwt_all[1];
         jwt_payload = new Buffer(jwt_payload, 'base64').toString('utf8');
         jwt_header = new Buffer(jwt_header, 'base64').toString('utf8');
         if (IsJsonString(jwt_header) && IsJsonString(jwt_payload)) {
             if (IsvalidPayload(jwt_payload)) {
-                var issuer = JSON.parse(jwt_payload).iss;
-                try {
-                    if (!keys[issuer]) {
-                        throw ('issuer:' + issuer + 'not found.');
-                    }
-                    var pub = keys[issuer];
-                } catch (err) {
-                    if (err !== null)
-                        Callback(err, JSON.stringify({authenticated: false, token: token}));
-                    return;
+                let issuer = JSON.parse(jwt_payload).iss;
+                if (!keys[issuer]) {
+                    return JSON.stringify({authenticated: false, token: token})
                 }
+                let pub = keys[issuer];
                 jwt.verify(token, pub, function (err) {
                     if (err !== null) {
-                        Callback(err.toString(), JSON.stringify({authenticated: false, token: token}));
-                        return;
+                        return JSON.stringify({authenticated: false, token: token});
                     }
-                    Callback(null, JSON.stringify({authenticated: true, token: token}));
-
+                    return JSON.stringify({authenticated: true, token: token})
                 });
             } else {
-                Callback('malformed header and/or payload ', JSON.stringify({
+                return JSON.stringify({
                     authenticated: false,
                     token: token
-                }));
+                })
             }
-
         } else {
-            Callback('malformed header and/or payload ', JSON.stringify({
+            return JSON.stringify({
                 authenticated: false,
                 token: token
-            }));
+            })
         }
         return;
     }
-
-    Callback('it is not known token type, known is JWT ', JSON.stringify({
+    return JSON.stringify({
         authenticated: false,
         token: token
-    }));
-
+    })
 };

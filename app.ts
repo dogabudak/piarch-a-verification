@@ -1,8 +1,8 @@
-import { verification } from './lib/verification-factory'
+import {verify} from './lib/verification-factory'
 import * as cors from 'cors'
 import * as express from 'express'
 
-import { StatusCodes, getReasonPhrase } from 'http-status-codes'
+import {StatusCodes, getReasonPhrase} from 'http-status-codes'
 
 import 'dotenv/config'
 
@@ -14,15 +14,13 @@ app.set('port', process.env.SERVER_PORT || 7001)
 
 app.get('/verify/:tokenString', async (req, res) => {
     try {
-        const { tokenString } = req.params
+        const {tokenString} = req.params
         const [type, token] = tokenString.split(' ')
-        if ( type && token ) {
-            return verification(type, token, (err, answer) => {
-                if (err) { return res.status(StatusCodes.NOT_FOUND).send(false) }
-                const auth = JSON.parse(answer);
-                const result = auth.authenticated === true ? "true" : "false";
-                return res.status(StatusCodes.OK).send(result)
-            });
+        if (type && token) {
+            const answer = await verify(type, token)
+            const auth = JSON.parse(answer);
+            const result = auth.authenticated === true ? "true" : "false";
+            return res.status(StatusCodes.OK).send(result)
         }
         return res.status(StatusCodes.NOT_FOUND).send(false)
     } catch (e) {
