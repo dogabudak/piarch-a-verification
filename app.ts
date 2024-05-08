@@ -1,6 +1,7 @@
 import {verify} from './lib/verification-factory'
 import * as cors from 'cors'
 import * as express from 'express'
+import { isIP } from 'node:net'
 
 import {StatusCodes, getReasonPhrase} from 'http-status-codes'
 
@@ -13,6 +14,10 @@ app.options('*', cors())
 app.set('port', process.env.SERVER_PORT || 7001)
 
 app.get('/verify/:tokenString', async (req, res) => {
+    const ipAddress = req.socket.remoteAddress
+    if (!isIP(ipAddress)){
+        console.log('Invalid IP address')
+    }
     try {
         const {tokenString} = req.params
         const [type, token] = tokenString.split(' ')
